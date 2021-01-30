@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  conversorDeMoeda
 //
-//  Created by Diogenes de Souza on 07/01/21.
+// Diogenes de Souza on 07/01/21.
 //
 
 import UIKit
