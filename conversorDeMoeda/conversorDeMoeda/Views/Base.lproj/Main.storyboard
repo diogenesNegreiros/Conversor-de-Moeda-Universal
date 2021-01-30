@@ -131,7 +131,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </imageView>
-                                <searchBar alpha="0.80000000000000004" contentMode="redraw" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yvY-lG-YPy">
+                                <searchBar alpha="0.80000000000000004" contentMode="redraw" placeholder="Buscar moeda" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yvY-lG-YPy">
                                     <rect key="frame" x="0.0" y="46" width="320" height="56"/>
                                     <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -148,9 +148,8 @@
                             </constraints>
                         </view>
                         <button key="tableFooterView" opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XYl-ez-YSD">
-                            <rect key="frame" x="0.0" y="245" width="320" height="99"/>
+                            <rect key="frame" x="0.0" y="245" width="320" height="60"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="1" green="0.92647868389999999" blue="0.85069280859999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="24"/>
                             <state key="normal">
                                 <imageReference key="image" image="chevron.backward.2" catalog="system" renderingMode="template"/>
@@ -205,7 +204,6 @@
         <!--Navigation Controller-->
         <scene sceneID="dCN-zN-5w4">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qd5-l4-CeW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="hbR-Sv-mfl" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="22x-qE-Zxa">
@@ -216,6 +214,7 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="4MP-c9-btn"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qd5-l4-CeW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1015.9420289855074" y="76.339285714285708"/>
         </scene>
