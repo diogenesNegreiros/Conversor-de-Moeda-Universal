@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Moeda {
+struct Moeda: Codable{
     var nome:String?
     var sigla:String?
     var valor:Double?

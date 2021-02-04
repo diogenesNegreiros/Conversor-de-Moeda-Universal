@@ -7,53 +7,70 @@
 
 import UIKit
 
+protocol MoedasTableViewControllerDelegate {
+    func moedaSelected(nomeValue: String, siglaValue: String)
+}
+
 class MoedasTableViewController: UITableViewController {
     
+    var delegado: MoedasTableViewControllerDelegate?
     var moedasServerList:[Moeda] = []
     var moedasList:[Moeda] = []
     var buttonSelect:Int?
     
-//    @IBOutlet var searchController : UISearchController!
-    
     @IBOutlet weak var mySearchBar: UISearchBar!
-    
     @IBOutlet var myTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-     
-        myTableView.delegate = self
+        
+        if let myData = UserDefaults.standard.value(forKey: "listaDeMoedas") as? Data {
+            self.moedasList = try! PropertyListDecoder().decode(Array<Moeda>.self, from: myData)
+            
+            self.moedasServerList = self.moedasList
+            self.myTableView.reloadData()
+            
+        }
         
         carregarLista()
+        
+        
     }
     
     // MARK: Retorna para a view anterior, botão no final da lista
     @IBAction func returViewAfter(_ sender: Any) {
-        fecharView()
+        navigationController?.popViewController(animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // MARK: pega no UserDefault o id do botão acionado na tela anterior
-        buttonSelect =  UserDefaults.standard.integer(forKey: "buttonSelect")
-        
     }
+    
     // MARK: Carrega a lista de moedas na View
     func carregarLista(){
+        
         Rest.loadCurrencys(endPoint: "list"){(nomesSiglas, siglasValues) in
             self.moedasServerList = nomesSiglas as! [Moeda]
-            
             self.moedasList = self.moedasServerList
-                    
+            
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(self.moedasList) , forKey: "listaDeMoedas")
+            
             DispatchQueue.main.async {
                 self.myTableView.reloadData()
             }
         } onError: { (cambioError) in
-            print(cambioError)
+            
+            print("Erro de internet")
+            
         }
+    }
+    func showAlert(title: String, message: String) {
         
-        print("carregou do servidor da api AGORA!")
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        
     }
     
     // MARK: Filtra a lista de moedas
@@ -64,19 +81,17 @@ class MoedasTableViewController: UITableViewController {
         }else{
             let text = textoBusca.lowercased()
             self.moedasList = self.moedasServerList
-              self.moedasList = self.moedasList.filter { $0.nome!.lowercased().contains(text) }
+            self.moedasList = self.moedasList.filter { $0.nome!.lowercased().contains(text) }
         }
         
-    }
-    
-    
-    func fecharView(){
-        navigationController?.popViewController(animated: true)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return moedasList.count
     }
+    
+    
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
@@ -90,40 +105,28 @@ class MoedasTableViewController: UITableViewController {
         
         let sigla:String = moedasList[indexPath.row].sigla ?? ""
         let nome:String = moedasList[indexPath.row].nome ?? ""
-//        print(sigla)
         
-        if self.buttonSelect == 1 {
-            UserDefaults.standard.set("\(sigla)-\(nome)" , forKey: "nomeOrig")
-            UserDefaults.standard.set(sigla , forKey: "siglaOrig")
-        }else{
-            UserDefaults.standard.set("\(sigla)-\(nome)"  , forKey: "nomeDest")
-            UserDefaults.standard.set(sigla , forKey: "siglaDest")
-        }
-        fecharView()
+        delegado?.moedaSelected(nomeValue: nome, siglaValue: sigla)
+        
+        navigationController?.popViewController(animated: true)
     }
     
 }
 
 extension MoedasTableViewController:  UISearchBarDelegate{
-
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.moedasList = self.moedasServerList
         myTableView.reloadData()
     }
-
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-
         self.mySearchBar.endEditing(true)
     }
     
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    print("searchText (searchText)")
+        print("searchText (searchText)")
         buscarMoeda(textoBusca: searchBar.text!)
         myTableView.reloadData()
     }
-
-
-
-
 }

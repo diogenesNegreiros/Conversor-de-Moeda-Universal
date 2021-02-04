@@ -7,100 +7,110 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController{
     
     let formatter = NumberFormatter()
-        
+    var botaoSelecionado = 0
     var cambioValorList: Dictionary<String,Double> = [:]
-    var textOrig:String?
-    var textDest:String?
-    var siglaOrig:String?
-    var siglaDest:String?
+    var textOrig:String = ""
+    var textDest:String = ""
+    var siglaOrig:String = ""
+    var siglaDest:String = ""
     
-    @IBOutlet weak var origButton: UIButton!
-    @IBOutlet weak var destButton: UIButton!
+    
+    @IBOutlet weak var buttonOrig: UIButton!
+    @IBOutlet weak var buttonDest: UIButton!
     @IBOutlet weak var display: UITextField!
     @IBOutlet weak var labelResult: UILabel!
     
-    // MARK: fechar teclado ao tocar na view
-    @IBAction func closeKeyboard(_ sender: Any) {
-        labelResult.text = getValorDolar(textOrig: siglaOrig!, textDest: siglaDest!, valor: display.text!)
-        self.view.endEditing(true)
-    }
-    // MARK: ação do primeiro botão
-    @IBAction func actionOrig(_ sender: UIButton) {
-        performSegue(withIdentifier: "next", sender: nil)
-        UserDefaults.standard.set(1 , forKey: "buttonSelect")//salva 1 para o botão selecionado em UserDefault
-    }
-    // MARK: ação do segundo botão
-    @IBAction func actionDest(_ sender: UIButton) {
-        performSegue(withIdentifier: "next", sender: nil)
-        UserDefaults.standard.set(2 , forKey: "buttonSelect")//salva 2 para o botão selecionado em UserDefault
-    }
-    // MARK: Atualiza o resultado ao digitar no campo de texto
-    @IBAction func updateResult(_ sender: Any) {
-        
-        if !siglaOrig!.isEmpty &&  !siglaDest!.isEmpty{
-            labelResult.text = getValorDolar(textOrig: siglaOrig!, textDest: siglaDest!, valor: display.text!)
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // MARK: Recupera os dados  do valor e resultado
-        if let value = UserDefaults.standard.string(forKey: "display"){
-            display.text = value
-            }
-        if let value = UserDefaults.standard.string(forKey: "result"){
-            labelResult.text = value
-            }
-        
         formatter.numberStyle = .currency
         formatter.alwaysShowsDecimalSeparator = true
+        
+        if let myData = UserDefaults.standard.value(forKey: "listaDeCotacao") as? Data {
+            self.cambioValorList = try! PropertyListDecoder().decode(Dictionary<String, Double>.self, from: myData)
+            
+        }
+        
     }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // MARK: recupera dados salvos
-        self.textOrig =  UserDefaults.standard.string(forKey: "nomeOrig") ?? "Moeda de Origem"
-        self.textDest =  UserDefaults.standard.string(forKey: "nomeDest") ?? "Moeda de destino"
-        
-        if let origSigla = UserDefaults.standard.string(forKey: "siglaOrig"){
-            self.siglaOrig  =  origSigla
-        }else{
-            self.siglaOrig  =  ""
-        }
-        
-        if let destSigla = UserDefaults.standard.string(forKey: "siglaDest"){
-            self.siglaDest  =  destSigla
-        }else{
-            self.siglaDest  =  ""
-        }
-        
-        origButton.setTitle(textOrig, for: .normal)
-        destButton.setTitle(textDest, for: .normal)
         
         // MARK: Pega a lista de moedas com suas cotações no servidor
         Rest.loadCurrencys(endPoint: "live") { (nomesSiglas, siglasValues) in
             self.cambioValorList = siglasValues!
+            
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(self.cambioValorList) , forKey: "listaDeCotacao")
+            
         } onError: { (cambioError) in
             print(cambioError)
+            print("Erro de internet")
         }
         // MARK: EXIBE RESULTADO SOMENTE SE O VALOR ESTIVERER PREENCHIDO E AS MOEDAS ESCOLHIDAS
-        if !cambioValorList.isEmpty && !siglaOrig!.isEmpty && !siglaDest!.isEmpty {
-            labelResult.text = getValorDolar(textOrig: siglaOrig!, textDest: siglaDest!, valor: display.text!)
+        if !cambioValorList.isEmpty && !siglaOrig.isEmpty && !siglaDest.isEmpty {
+            labelResult.text = getValorDolar(textOrig: siglaOrig, textDest: siglaDest, valor: display.text!)
         }
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // MARK: salvar dados no banco UserDefault, persistencia de dados do app
-                UserDefaults.standard.set(display.text, forKey: "display")
-        UserDefaults.standard.set(labelResult.text, forKey: "result")
+    }
+    
+    // MARK: fechar teclado ao tocar na view
+    @IBAction func closeKeyboard(_ sender: Any) {
+        labelResult.text = getValorDolar(textOrig: siglaOrig, textDest: siglaDest, valor: display.text!)
+        self.view.endEditing(true)
+    }
+    
+    // MARK: ação do primeiro botão
+    @IBAction func actionOrig(_ sender: Any) {
+        botaoSelecionado = 0
+        let controle = storyboard?.instantiateViewController(identifier: "MoedasTableViewController") as! MoedasTableViewController
+        controle.delegado = self
+        navigationController?.pushViewController(controle, animated: true)
     }
     
     
+    // MARK: ação do segundo botão
+    @IBAction func actionDest(_ sender: UIButton) {
+        botaoSelecionado = 1
+        
+        let controle = storyboard?.instantiateViewController(identifier: "MoedasTableViewController") as! MoedasTableViewController
+        controle.delegado = self
+        navigationController?.pushViewController(controle, animated: true)
+        
+    }
+    // MARK: Atualiza o resultado ao digitar no campo de texto
+    @IBAction func updateResult(_ sender: Any) {
+        
+        if !siglaOrig.isEmpty &&  !siglaDest.isEmpty{
+            labelResult.text = getValorDolar(textOrig: siglaOrig, textDest: siglaDest, valor: display.text!)
+        }
+    }
+    
+    func showAlert(title: String, message: String) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func applyTextButton(nome: String, sigla: String){
+        
+        if botaoSelecionado == 0{
+            buttonOrig.setTitle("\(nome) - \(sigla)", for: .normal)
+            textOrig = nome
+            siglaOrig = sigla
+        }else{
+            buttonDest.setTitle("\(nome) - \(sigla)", for: .normal)
+            textDest = nome
+            siglaDest = sigla
+        }
+    }
+    
+    //MARK: Texto digitado para formato de moeda
     func getValorFormatado(valor: Double, moedaCode: String) -> String{
         
         formatter.currencySymbol = moedaCode
@@ -112,7 +122,6 @@ class ViewController: UIViewController {
     func getValorDolar(textOrig:String, textDest:String, valor:String) -> String{
         
         let valorNovo = valor.replacingOccurrences(of: ",", with: ".")
-        
         var resultado:Double = 0
         let cotacao1:Double = cambioValorList["USD" + textOrig] ?? 1
         let cotacao2:Double = cambioValorList["USD" + textDest] ?? 1
@@ -128,13 +137,18 @@ class ViewController: UIViewController {
             print("valor em dolar: \(valorEmDolar)")
             resultado = valorEmDolar * cotacao2
             print("valor em Destino: \(resultado)")
-            
         }
         
-       
         let resultString = getValorFormatado(valor: resultado, moedaCode: textDest)
         return resultString
     }
-    
+}
+
+extension ViewController: MoedasTableViewControllerDelegate{
+    func moedaSelected(nomeValue: String, siglaValue: String) {
+        print("nome: \(nomeValue) sigla: \(siglaValue)")
+        
+        applyTextButton(nome: nomeValue, sigla: siglaValue)
+    }
 }
 

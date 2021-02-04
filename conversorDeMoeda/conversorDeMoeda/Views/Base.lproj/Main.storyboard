@@ -69,7 +69,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="actionOrig:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nOz-oF-bGR"/>
+                                    <action selector="actionOrig:" destination="BYZ-38-t0r" eventType="touchUpInside" id="i5v-J6-9Qq"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="4UZ-uz-LjX">
@@ -86,7 +86,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="actionDest:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sss-XW-rld"/>
+                                    <action selector="actionDest:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jIb-AG-4HI"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="arrow.down" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="qBy-hm-GAr">
@@ -103,11 +103,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="Tte-oh-J5W"/>
                     <connections>
-                        <outlet property="destButton" destination="4UZ-uz-LjX" id="lGC-wY-cXN"/>
+                        <outlet property="buttonDest" destination="4UZ-uz-LjX" id="2Uz-OC-3CM"/>
+                        <outlet property="buttonOrig" destination="Dcb-7Z-eHc" id="i6R-uw-S46"/>
                         <outlet property="display" destination="1lV-2a-qV4" id="Q2s-gM-CcE"/>
                         <outlet property="labelResult" destination="Uy6-OU-6qY" id="IC7-TF-otX"/>
-                        <outlet property="origButton" destination="Dcb-7Z-eHc" id="EV2-34-RH7"/>
-                        <segue destination="zdD-91-jQc" kind="show" identifier="next" id="hqk-RL-MSm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -117,7 +116,7 @@
         <!--Lista de Moedas-->
         <scene sceneID="gDe-CR-g2h">
             <objects>
-                <tableViewController title="Lista de Moedas" id="zdD-91-jQc" customClass="MoedasTableViewController" customModule="conversorDeMoeda" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MoedasTableViewController" title="Lista de Moedas" id="zdD-91-jQc" customClass="MoedasTableViewController" customModule="conversorDeMoeda" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="1cb-ZW-sb6">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -131,7 +130,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </imageView>
-                                <searchBar alpha="0.80000000000000004" contentMode="redraw" placeholder="Buscar moeda" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yvY-lG-YPy">
+                                <searchBar alpha="0.80000000000000004" contentMode="redraw" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yvY-lG-YPy">
                                     <rect key="frame" x="0.0" y="46" width="320" height="56"/>
                                     <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -148,8 +147,9 @@
                             </constraints>
                         </view>
                         <button key="tableFooterView" opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XYl-ez-YSD">
-                            <rect key="frame" x="0.0" y="245" width="320" height="60"/>
+                            <rect key="frame" x="0.0" y="245" width="320" height="98"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="1" green="0.92647868389999999" blue="0.85069280859999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="24"/>
                             <state key="normal">
                                 <imageReference key="image" image="chevron.backward.2" catalog="system" renderingMode="template"/>
@@ -191,7 +191,7 @@
                             <outlet property="delegate" destination="zdD-91-jQc" id="PVG-vf-O9E"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="sZK-Gk-X1U"/>
+                    <navigationItem key="navigationItem" title="sss" id="sZK-Gk-X1U"/>
                     <connections>
                         <outlet property="mySearchBar" destination="yvY-lG-YPy" id="0BT-oO-aUi"/>
                         <outlet property="myTableView" destination="1cb-ZW-sb6" id="cjq-fD-YCY"/>
@@ -199,7 +199,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d23-rU-OOC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2766" y="76"/>
+            <point key="canvasLocation" x="3020.625" y="75"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="dCN-zN-5w4">

@@ -13,6 +13,7 @@ enum cambioError {
     case takError(error: Error)
     case noResponse
 }
+
 // MARK: classe responsável por fazer a requisição no servidor
 class Rest {
     private static let basePhath = "http://api.currencylayer.com/"
@@ -29,10 +30,13 @@ class Rest {
         return config
     }()
     
+    
     // MARK: Carrega a lista de moedas com nome e siglas correspondentes (String:String)
     class func loadCurrencys(endPoint: String, onClomplete: @escaping([Any]?, Dictionary<String,Double>?) -> Void, onError: @escaping(cambioError) -> Void){
         
         fullUrl = URL(string: basePhath + endPoint + acesskey)
+        
+        
         guard let url = fullUrl else {
             onError(.url)
             return
@@ -66,12 +70,12 @@ class Rest {
                             moedasList.sort {
                                 $0.nome! < $1.nome!
                             }
-//                            print("\narray de moedas list: \(arrayDeMoedas)")
+                            //                            print("\narray de moedas list: \(arrayDeMoedas)")
                             onClomplete(moedasList, nil)
                         }else{
                             let cambioList: Cotacao = try JSONDecoder().decode(Cotacao.self, from: data)
                             let arrayDeMoedas = cambioList.quotes
-//                            print("\narray de moedas list: \(arrayDeMoedas)")
+                            //                            print("\narray de moedas list: \(arrayDeMoedas)")
                             
                             onClomplete(nil, arrayDeMoedas)
                             
@@ -79,6 +83,8 @@ class Rest {
                         
                     }catch{
                         print(error.localizedDescription)
+                        
+                        
                     }
                     
                 }else{
@@ -87,7 +93,7 @@ class Rest {
             }else{
                 onError(.takError(error: error!))
             }
-        
+            
         }
         dataTask.resume()
     }
