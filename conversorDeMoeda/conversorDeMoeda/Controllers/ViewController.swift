@@ -81,7 +81,7 @@ class ViewController: UIViewController{
         navigationController?.pushViewController(controle, animated: true)
         
     }
-    // MARK: Atualiza o resultado ao digitar no campo de texto
+    // MARK: Atualiza o resultado ao digitar no campo de textField
     @IBAction func updateResult(_ sender: Any) {
         
         if !siglaOrig.isEmpty &&  !siglaDest.isEmpty{
