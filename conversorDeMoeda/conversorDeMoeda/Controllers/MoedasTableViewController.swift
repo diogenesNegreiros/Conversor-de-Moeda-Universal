@@ -24,6 +24,7 @@ class MoedasTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // MARK Recupera lista do UserDefault
         if let myData = UserDefaults.standard.value(forKey: "listaDeMoedas") as? Data {
             self.moedasList = try! PropertyListDecoder().decode(Array<Moeda>.self, from: myData)
             
