@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MoedasTableViewControllerDelegate {
-    func moedaSelected(nomeValue: String, siglaValue: String)
+    func moedaSelected(moedaSelecionada: Moeda)
 }
 
 class MoedasTableViewController: UITableViewController {
@@ -104,10 +104,9 @@ class MoedasTableViewController: UITableViewController {
     // MARK:  a method from UITableViewDelegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let sigla:String = moedasList[indexPath.row].sigla ?? ""
-        let nome:String = moedasList[indexPath.row].nome ?? ""
+        let moeda: Moeda = moedasList[indexPath.row]
         
-        delegado?.moedaSelected(nomeValue: nome, siglaValue: sigla)
+        delegado?.moedaSelected(moedaSelecionada: moeda)
         
         navigationController?.popViewController(animated: true)
     }

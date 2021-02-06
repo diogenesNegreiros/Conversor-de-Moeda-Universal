@@ -97,7 +97,10 @@ class ViewController: UIViewController{
         
     }
     
-    func applyTextButton(nome: String, sigla: String){
+    func applyTextButton(moedaEscolhida: Moeda){
+        
+        let nome = String(moedaEscolhida.nome!)
+        let sigla = String(moedaEscolhida.sigla!)
         
         if botaoSelecionado == 0{
             buttonOrig.setTitle("\(nome) - \(sigla)", for: .normal)
@@ -145,10 +148,12 @@ class ViewController: UIViewController{
 }
 
 extension ViewController: MoedasTableViewControllerDelegate{
-    func moedaSelected(nomeValue: String, siglaValue: String) {
-        print("nome: \(nomeValue) sigla: \(siglaValue)")
+
+    
+    func moedaSelected(moedaSelecionada: Moeda) {
+  
         
-        applyTextButton(nome: nomeValue, sigla: siglaValue)
+        applyTextButton(moedaEscolhida: moedaSelecionada)
     }
 }
 
