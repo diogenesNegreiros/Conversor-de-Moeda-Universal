@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController{
+    
+    var fetchedResultsController : NSFetchedResultsController<Cota>!
     
     let formatter = NumberFormatter()
     var botaoSelecionado = 0
@@ -16,7 +19,6 @@ class ViewController: UIViewController{
     var textDest:String = ""
     var siglaOrig:String = ""
     var siglaDest:String = ""
-    
     
     @IBOutlet weak var buttonOrig: UIButton!
     @IBOutlet weak var buttonDest: UIButton!
@@ -28,29 +30,81 @@ class ViewController: UIViewController{
         formatter.numberStyle = .currency
         formatter.alwaysShowsDecimalSeparator = true
         
-        if let myData = UserDefaults.standard.value(forKey: "listaDeCotacao") as? Data {
-            self.cambioValorList = try! PropertyListDecoder().decode(Dictionary<String, Double>.self, from: myData)
-            
-        }
+        recuperarMoedaDoBanco()
         
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // MARK: Pega a lista de moedas com suas cotações no servidor
+     // MARK: Pega a lista de moedas com suas cotações no servidor
         Rest.loadCurrencys(endPoint: "live") { (nomesSiglas, siglasValues) in
             self.cambioValorList = siglasValues!
             
-            UserDefaults.standard.set(try? PropertyListEncoder().encode(self.cambioValorList) , forKey: "listaDeCotacao")
+//            UserDefaults.standard.set(try? PropertyListEncoder().encode(self.cambioValorList) , forKey: "listaDeCotacao")
+            
+            self.addCotaMoedaNoBanco()
             
         } onError: { (cambioError) in
             print(cambioError)
             print("Erro de internet")
+            
         }
         // MARK: EXIBE RESULTADO SOMENTE SE O VALOR ESTIVERER PREENCHIDO E AS MOEDAS ESCOLHIDAS
         if !cambioValorList.isEmpty && !siglaOrig.isEmpty && !siglaDest.isEmpty {
             labelResult.text = getValorDolar(textOrig: siglaOrig, textDest: siglaDest, valor: display.text!)
         }
+        
+        
+        
+       
+        
+    }
+    
+    func addCotaMoedaNoBanco(){
+        
+        for item in cambioValorList {
+            let cota: Cota = Cota(context: context)
+            cota.key = item.key
+            cota.value = item.value
+        }
+        
+        
+        do {
+            try context.save()
+        } catch  {
+            print(error.localizedDescription)
+        }
+        
+    }
+    
+    func recuperarMoedaDoBanco(){
+        
+        let fetchRequest: NSFetchRequest<Cota> = Cota.fetchRequest()
+        let sortDescritor = NSSortDescriptor(key: "key", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescritor]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+//        fetchedResultsController.delegate = self
+        
+        do {
+            try fetchedResultsController.performFetch()
+           let arrayDeCotas = fetchedResultsController.fetchedObjects ?? []
+         
+            var dictCotas: Dictionary<String, Double> = [:]
+            for item in arrayDeCotas {
+                dictCotas[item.key!] = item.value
+            }
+            
+            cambioValorList = dictCotas
+            
+            print("Recuperou DICIONARIO DO CORE DATA: \(dictCotas)")
+            
+        } catch  {
+            print(error.localizedDescription)
+        }
+        
+       
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -59,7 +113,10 @@ class ViewController: UIViewController{
     
     // MARK: fechar teclado ao tocar na view
     @IBAction func closeKeyboard(_ sender: Any) {
-        labelResult.text = getValorDolar(textOrig: siglaOrig, textDest: siglaDest, valor: display.text!)
+        
+        if !cambioValorList.isEmpty && !siglaOrig.isEmpty && !siglaDest.isEmpty {
+            labelResult.text = getValorDolar(textOrig: siglaOrig, textDest: siglaDest, valor: display.text!)
+        }
         self.view.endEditing(true)
     }
     
@@ -97,7 +154,7 @@ class ViewController: UIViewController{
         
     }
     
-    func applyTextButton(moedaEscolhida: Moeda){
+    func applyTextButton(moedaEscolhida: Currency){
         
         let nome = String(moedaEscolhida.nome!)
         let sigla = String(moedaEscolhida.sigla!)
@@ -150,7 +207,7 @@ class ViewController: UIViewController{
 extension ViewController: MoedasTableViewControllerDelegate{
 
     
-    func moedaSelected(moedaSelecionada: Moeda) {
+    func moedaSelected(moedaSelecionada: Currency) {
   
         
         applyTextButton(moedaEscolhida: moedaSelecionada)

@@ -24,6 +24,9 @@
 		99B4645C25A8C0B800DE150B /* MoedasTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B4645B25A8C0B800DE150B /* MoedasTableViewController.swift */; };
 		99B4647425A8DE7600DE150B /* Cambio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B4647325A8DE7600DE150B /* Cambio.swift */; };
 		99B4647925A8DE9F00DE150B /* Rest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B4647825A8DE9F00DE150B /* Rest.swift */; };
+		99F5529B25CF6F0700FD192A /* ModelCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 99F5529925CF6F0700FD192A /* ModelCoreData.xcdatamodeld */; };
+		99F552A025CF707200FD192A /* viewController+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F5529F25CF707200FD192A /* viewController+CoreData.swift */; };
+		99F552A625CF716200FD192A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99F552A525CF716200FD192A /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +70,9 @@
 		99B4645B25A8C0B800DE150B /* MoedasTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoedasTableViewController.swift; sourceTree = "<group>"; };
 		99B4647325A8DE7600DE150B /* Cambio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cambio.swift; sourceTree = "<group>"; };
 		99B4647825A8DE9F00DE150B /* Rest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rest.swift; sourceTree = "<group>"; };
+		99F5529A25CF6F0700FD192A /* ModelCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ModelCoreData.xcdatamodel; sourceTree = "<group>"; };
+		99F5529F25CF707200FD192A /* viewController+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "viewController+CoreData.swift"; sourceTree = "<group>"; };
+		99F552A525CF716200FD192A /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99F552A625CF716200FD192A /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +108,7 @@
 				994FEA2525A7EBF5002E3C93 /* conversorDeMoedaTests */,
 				994FEA3025A7EBF5002E3C93 /* conversorDeMoedaUITests */,
 				994FEA0D25A7EBF4002E3C93 /* Products */,
+				99F552A425CF716200FD192A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -174,6 +182,7 @@
 			children = (
 				99B4645B25A8C0B800DE150B /* MoedasTableViewController.swift */,
 				994FEA1325A7EBF4002E3C93 /* ViewController.swift */,
+				99F5529F25CF707200FD192A /* viewController+CoreData.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -183,8 +192,17 @@
 			children = (
 				99B4647325A8DE7600DE150B /* Cambio.swift */,
 				991AD53A25BA613F00DCE625 /* Moeda.swift */,
+				99F5529925CF6F0700FD192A /* ModelCoreData.xcdatamodeld */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		99F552A425CF716200FD192A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				99F552A525CF716200FD192A /* CoreData.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,6 +339,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99F5529B25CF6F0700FD192A /* ModelCoreData.xcdatamodeld in Sources */,
+				99F552A025CF707200FD192A /* viewController+CoreData.swift in Sources */,
 				994FEA1425A7EBF4002E3C93 /* ViewController.swift in Sources */,
 				994FEA1025A7EBF4002E3C93 /* AppDelegate.swift in Sources */,
 				991AD54025BA615800DCE625 /* Cotacao.swift in Sources */,
@@ -661,6 +681,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		99F5529925CF6F0700FD192A /* ModelCoreData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				99F5529A25CF6F0700FD192A /* ModelCoreData.xcdatamodel */,
+			);
+			currentVersion = 99F5529A25CF6F0700FD192A /* ModelCoreData.xcdatamodel */;
+			path = ModelCoreData.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 994FEA0425A7EBF4002E3C93 /* Project object */;
 }

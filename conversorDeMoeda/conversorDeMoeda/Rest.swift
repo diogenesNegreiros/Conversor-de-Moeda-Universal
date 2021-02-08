@@ -6,12 +6,19 @@
 //
 
 import Foundation
+import CoreData
+import UIKit
 
 
 enum cambioError {
     case url
     case takError(error: Error)
     case noResponse
+}
+
+var contexto: NSManagedObjectContext {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    return appDelegate.persistentContainer.viewContext
 }
 
 // MARK: classe responsável por fazer a requisição no servidor
@@ -35,8 +42,6 @@ class Rest {
     class func loadCurrencys(endPoint: String, onClomplete: @escaping([Any]?, Dictionary<String,Double>?) -> Void, onError: @escaping(cambioError) -> Void){
         
         fullUrl = URL(string: basePhath + endPoint + acesskey)
-        
-        
         guard let url = fullUrl else {
             onError(.url)
             return
@@ -59,31 +64,34 @@ class Rest {
                             let cambioList: Cambio = try JSONDecoder().decode(Cambio.self, from: data)
                             let arrayDeMoedas: Dictionary = cambioList.currencies
                             
-                            var moedasList:[Moeda] = []
+                            var currencyList:[Currency] = []
                             
                             for item in arrayDeMoedas {
-                                let moeda = Moeda(nome:String(item.value), sigla:item.key)
-                                moedasList.append(moeda)
+                                let currency = Currency(context: contexto)
+                                currency.nome = item.value
+                                currency.sigla = item.key
+                                currencyList.append(currency)
+                            }
+                            
+                            do {
+                                try contexto.save()
+                            } catch  {
+                                print(error.localizedDescription)
                             }
                             
                             // MARK: Ordena a lista por nome em ordem crescente
-                            moedasList.sort {
+                            currencyList.sort {
                                 $0.nome! < $1.nome!
                             }
-                            //                            print("\narray de moedas list: \(arrayDeMoedas)")
-                            onClomplete(moedasList, nil)
+                            onClomplete(currencyList, nil)
                         }else{
                             let cambioList: Cotacao = try JSONDecoder().decode(Cotacao.self, from: data)
                             let arrayDeMoedas = cambioList.quotes
-                            //                            print("\narray de moedas list: \(arrayDeMoedas)")
-                            
                             onClomplete(nil, arrayDeMoedas)
-                            
                         }
                         
                     }catch{
                         print(error.localizedDescription)
-                        
                         
                     }
                     
@@ -98,6 +106,5 @@ class Rest {
         dataTask.resume()
     }
 }
-
 
 
