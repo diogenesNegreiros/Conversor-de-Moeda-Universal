@@ -36,12 +36,9 @@ class ViewController: UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-     // MARK: Pega a lista de moedas com suas cotações no servidor
+        // MARK: Pega a lista de moedas com suas cotações no servidor
         Rest.loadCurrencys(endPoint: "live") { (nomesSiglas, siglasValues) in
             self.cambioValorList = siglasValues!
-            
-//            UserDefaults.standard.set(try? PropertyListEncoder().encode(self.cambioValorList) , forKey: "listaDeCotacao")
-            
             self.addCotaMoedaNoBanco()
             
         } onError: { (cambioError) in
@@ -53,11 +50,6 @@ class ViewController: UIViewController{
         if !cambioValorList.isEmpty && !siglaOrig.isEmpty && !siglaDest.isEmpty {
             labelResult.text = getValorDolar(textOrig: siglaOrig, textDest: siglaDest, valor: display.text!)
         }
-        
-        
-        
-       
-        
     }
     
     func addCotaMoedaNoBanco(){
@@ -67,8 +59,6 @@ class ViewController: UIViewController{
             cota.key = item.key
             cota.value = item.value
         }
-        
-        
         do {
             try context.save()
         } catch  {
@@ -84,12 +74,12 @@ class ViewController: UIViewController{
         fetchRequest.sortDescriptors = [sortDescritor]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-//        fetchedResultsController.delegate = self
+        //        fetchedResultsController.delegate = self
         
         do {
             try fetchedResultsController.performFetch()
-           let arrayDeCotas = fetchedResultsController.fetchedObjects ?? []
-         
+            let arrayDeCotas = fetchedResultsController.fetchedObjects ?? []
+            
             var dictCotas: Dictionary<String, Double> = [:]
             for item in arrayDeCotas {
                 dictCotas[item.key!] = item.value
@@ -102,9 +92,6 @@ class ViewController: UIViewController{
         } catch  {
             print(error.localizedDescription)
         }
-        
-       
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -205,11 +192,7 @@ class ViewController: UIViewController{
 }
 
 extension ViewController: MoedasTableViewControllerDelegate{
-
-    
     func moedaSelected(moedaSelecionada: Currency) {
-  
-        
         applyTextButton(moedaEscolhida: moedaSelecionada)
     }
 }
