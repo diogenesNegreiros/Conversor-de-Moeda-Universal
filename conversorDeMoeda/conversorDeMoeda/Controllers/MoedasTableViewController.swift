@@ -14,10 +14,10 @@ protocol MoedasTableViewControllerDelegate {
 
 class MoedasTableViewController: UITableViewController {
     
-    var fetchedResultsController : NSFetchedResultsController<Currency>!
+    private var fetchedResultsController : NSFetchedResultsController<Currency>!
     var delegado: MoedasTableViewControllerDelegate?
-    var arrayCurrenciesSearch:[Currency] = []
-    var arrayCurrenciesInApi:[Currency] = []
+    private var arrayCurrenciesSearch:[Currency] = []
+    private var arrayCurrenciesInApi:[Currency] = []
     
     @IBOutlet weak var mySearchBar: UISearchBar!
     @IBOutlet var myTableView: UITableView!
@@ -48,7 +48,6 @@ class MoedasTableViewController: UITableViewController {
             try fetchedResultsController.performFetch()
             arrayCurrenciesInApi = fetchedResultsController.fetchedObjects ?? []
             arrayCurrenciesSearch = arrayCurrenciesInApi
-            print("RECUPEROU ARRAY DO BANCO -  getCoreDataCurrencies()")
             
         } catch  {
             print(error.localizedDescription)
@@ -72,9 +71,9 @@ class MoedasTableViewController: UITableViewController {
             }
         } onError: { (cambioError) in
             print("Erro de internet")
-            self.showAlert(title: "Atenção!", message: "Sem internet, ou sem resposta do servidor!")
+            self.showAlert(title: "Alert!", message: "Without Internet!")
         }
-        print("EXECUTOU METODO CARREGAR LISTA")
+      
     }
     
     //MARK Cria um alerta simples
@@ -95,17 +94,12 @@ class MoedasTableViewController: UITableViewController {
             let text = textoBusca.lowercased()
             self.arrayCurrenciesSearch = self.arrayCurrenciesInApi
             self.arrayCurrenciesSearch = self.arrayCurrenciesSearch.filter { $0.nome!.lowercased().contains(text)}
-            
-            print("Array filtrado: \(arrayCurrenciesSearch)")
         }
-        
-        print("EXECUTOU METODO BUSCAR MOEDA!!!!")
         
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        print("EXECUTOU  numberOfRowsInSection ")
         return arrayCurrenciesSearch.count
         
     }
@@ -138,7 +132,6 @@ extension MoedasTableViewController:  UISearchBarDelegate, NSFetchedResultsContr
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("DIGITOU NA SEACH BAR:   \(searchBar.text!)")
         buscarMoeda(textoBusca: searchBar.text!)
         myTableView.reloadData()
         

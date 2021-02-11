@@ -13,12 +13,12 @@ class ViewController: UIViewController{
     var fetchedResultsController : NSFetchedResultsController<Cota>!
     
     let formatter = NumberFormatter()
-    var botaoSelecionado = 0
-    var cambioValorList: Dictionary<String,Double> = [:]
-    var textOrig:String = ""
-    var textDest:String = ""
-    var siglaOrig:String = ""
-    var siglaDest:String = ""
+    private var botaoSelecionado = 0
+    private var cambioValorList: Dictionary<String,Double> = [:]
+    private var textOrig:String = ""
+    private var textDest:String = ""
+    private var siglaOrig:String = ""
+    private var siglaDest:String = ""
     
     @IBOutlet weak var buttonOrig: UIButton!
     @IBOutlet weak var buttonDest: UIButton!
@@ -86,8 +86,6 @@ class ViewController: UIViewController{
             }
             
             cambioValorList = dictCotas
-            
-            print("Recuperou DICIONARIO DO CORE DATA: \(dictCotas)")
             
         } catch  {
             print(error.localizedDescription)

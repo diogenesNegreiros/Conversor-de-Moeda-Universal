@@ -129,7 +129,6 @@
 				994FEA1125A7EBF4002E3C93 /* SceneDelegate.swift */,
 				994FEA0F25A7EBF4002E3C93 /* AppDelegate.swift */,
 				99B4647825A8DE9F00DE150B /* Rest.swift */,
-				991AD53F25BA615800DCE625 /* Cotacao.swift */,
 				99B4646C25A8C1AE00DE150B /* Model */,
 				99B4645725A8BF7900DE150B /* Views */,
 				99B4646025A8C0FE00DE150B /* Controllers */,
@@ -190,6 +189,7 @@
 		99B4646C25A8C1AE00DE150B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				991AD53F25BA615800DCE625 /* Cotacao.swift */,
 				99B4647325A8DE7600DE150B /* Cambio.swift */,
 				991AD53A25BA613F00DCE625 /* Moeda.swift */,
 				99F5529925CF6F0700FD192A /* ModelCoreData.xcdatamodeld */,
